@@ -19,43 +19,33 @@ namespace API.Controllers
         }
         //GET /api/images
         //return all the images. The result should be pagniated (10 images per page). The result should be ordered by posting date
-        [HttpGet]
-        public async Task<ActionResult> GetImages()
-        {
-            try
-            {
-                var images = await _context.Images.OrderByDescending(i => i.PostingDate).ToListAsync();
-                return Ok(images);
-            }
-            catch (System.Exception)
-            {
-                return BadRequest();
-            }
-        }
+        //Response
+        //{ "meta": { "totalPages": 20, "totalImages": 200, }, "data": [ { "id": "233-9A2-…", "url": "url", "username": "name" } ], "links": { "first": "url", "prev": "url", "next": "url", "last": "url",1" } }
+        //use try catch to handle the error
+
+        // [HttpGet]
+        // public async Task<IActionResult> GetImages()
+        // {
+
+        // }
+
         //GET /api/images/{id}
         //Return all the details on an image (given by id). Return 404 if the id doesn't exist or return 400 if the id format is not correct
-        [HttpGet("{id}")]
-        public async Task<ActionResult> GetImage(int id)
-        {
-            try
-            {
-                var image = await _context.Images.FindAsync(id);
-                if (image == null)
-                {
-                    return NotFound();
-                }
-                return Ok(image);
-            }
-            catch (System.Exception)
-            {
-                return BadRequest();
-            }
-        }
+        //Response
+        //{ "id": "233-9A2-…", "url": "url", "user-name": "name", "user-id": "123-33A-…", "tags": ["bird", "nature"] }
+
+
         //GET /api/images/byTag?tag=cars
-        //Return all the images that include the given tag . The result should be pagniated (10 images per page). The result should be ordered by posting date. If the result is empty, return 404
+        //Return all the images that include the given tag . The result should be paginated (10 images per page). The result should be ordered by posting date. If the result is empty, return 404
+        //Response
+        //{ "meta": { "totalPages": 20, "totalImages": 200, }, "data": [ { "id": "233-9A2-…", "url": "url", "username": "name" } ], "links": { "first": "url", "prev": "url", "next": "url", "last": "url",1" } }
+
 
         //GET /api/images/populartags
         //Return the top 5 popular tags from the database (the tags that repeated the most). The result should be ordered by popularity (the tags that are used the most should be at the top)
+        //Response
+        //[ { "tag": "car", "count": "298" }, { "tag": "nature", "count": "243" }, }
+
 
     }
 }
