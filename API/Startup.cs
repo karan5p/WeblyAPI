@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using API.Models.Persistence;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -27,7 +28,7 @@ namespace API
         {
 
             services.AddControllers();
-
+            services.AddEntityFrameworkSqlite().AddDbContext<DataContext>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
