@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Models.Entities;
+using API.Models.Helpers;
 using API.Models.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,17 +19,15 @@ namespace API.Controllers
         {
             _context = context;
         }
+
+
+
         //GET /api/images
         //return all the images. The result should be pagniated (10 images per page). The result should be ordered by posting date
         //Response
         //{ "meta": { "totalPages": 20, "totalImages": 200, }, "data": [ { "id": "233-9A2-…", "url": "url", "username": "name" } ], "links": { "first": "url", "prev": "url", "next": "url", "last": "url",1" } }
         //use try catch to handle the error
 
-        // [HttpGet]
-        // public async Task<IActionResult> GetImages()
-        // {
-
-        // }
 
         //GET /api/images/{id}
         //Return all the details on an image (given by id). Return 404 if the id doesn't exist or return 400 if the id format is not correct

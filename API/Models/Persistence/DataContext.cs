@@ -10,7 +10,9 @@ namespace API.Models.Persistence
     public class DataContext : DbContext
     {
         public DbSet<Image> Images { get; set; }
-        public object Users { get; internal set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
