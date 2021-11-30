@@ -10,6 +10,8 @@ namespace API.Models.Persistence
     public class DataContext : DbContext
     {
         public DbSet<Image> Images { get; set; }
+        public object Users { get; internal set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite("FileName=image.db");
