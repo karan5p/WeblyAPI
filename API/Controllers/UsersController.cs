@@ -154,7 +154,7 @@ namespace API.Controllers
         //GET /api/users/{id}/images
 
         [HttpGet("{id}/images")]
-        //Return all the images of a given user. The result should be paginated (10 images per page).
+        //Return all the images of a given user. The result should be paginated (10 images per page). The result should be ordered by posting date
         //Paginated Response using ResponseHelper and PagedResponse, GetPagedResponse with Meta, Data, Links
         public async Task<IActionResult> GetUserImages(string id, [FromQuery] int page = 1)
         {
@@ -193,6 +193,9 @@ namespace API.Controllers
             await _context.SaveChangesAsync();
             return Ok(user);
         }
+        //Error
+        //In case of any error, return an error object to the user. You could use return BadRequest(error)
+        // Implemented within every http method.
 
     }
 }
