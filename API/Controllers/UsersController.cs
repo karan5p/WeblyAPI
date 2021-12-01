@@ -178,8 +178,21 @@ namespace API.Controllers
             var pagedResponse = ResponseHelper.GetPagedResponse("http://localhost:5000/api/users/{id}/images", imagesDTO, page, 10, user.Images.Count);
             return Ok(pagedResponse);
         }
+
+        //DELETE /api/users{id}
+        [HttpDelete("{id}")]
+        //Remove the user (given by Id) and all of his images.
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Id == new Guid(id));
+            if (user == null)
+            {
+                return NotFound("Error 404: User not found");
+            }
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            return Ok(user);
+        }
+
     }
-
-
-
 }
