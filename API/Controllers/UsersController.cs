@@ -6,6 +6,7 @@ using API.Models.DTOs;
 using API.Models.Entities;
 using API.Models.Helpers;
 using API.Models.Persistence;
+using API.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -89,7 +90,7 @@ namespace API.Controllers
             {
                 var imageToAdd = new Image
                 {
-                    Url = image.Url,
+                    Url = image.Url
                     //     Tags = tagList
                     // request.AddParameter("image_url", imageUrl);
 
@@ -97,6 +98,11 @@ namespace API.Controllers
                     //save these tags to the database.
 
                 };
+                foreach (var i in ImageHelper.GetTags(image.Url))
+                {
+                    var tagged = new Tag { Text = i };
+                    tagList.Add(tagged.Text);
+                }
                 user.Images.Add(imageToAdd);
                 await _context.SaveChangesAsync();
                 var lastTen = user.Images.OrderByDescending(i => i.Id).Take(10);
@@ -145,6 +151,35 @@ namespace API.Controllers
             };
         }
 
+        //GET /api/users/{id}/images
 
+        [HttpGet("{id}/images")]
+        //Return all the images of a given user. The result should be paginated (10 images per page).
+        //Paginated Response using ResponseHelper and PagedResponse, GetPagedResponse with Meta, Data, Links
+        public async Task<IActionResult> GetUserImages(string id, [FromQuery] int page = 1)
+        {
+            var user = _context.Users.Include(x => x.Images).FirstOrDefault(u => u.Id == new Guid(id));
+            if (user == null)
+            {
+                return NotFound("Error 404: User not found");
+            }
+            var images = user.Images.OrderByDescending(i => i.Id).Skip((page - 1) * 10).Take(10);
+            var imagesDTO = new List<ImageDTO>();
+            foreach (var image in images)
+            {
+                var imageDTO = new ImageDTO
+                {
+                    Id = image.Id,
+                    Url = image.Url,
+                    //Tags = image.Tags.Select(t => t.Text).ToList()
+                };
+                imagesDTO.Add(imageDTO);
+            }
+            var pagedResponse = ResponseHelper.GetPagedResponse("http://localhost:5000/api/users/{id}/images", imagesDTO, page, 10, user.Images.Count);
+            return Ok(pagedResponse);
+        }
     }
+
+
+
 }
