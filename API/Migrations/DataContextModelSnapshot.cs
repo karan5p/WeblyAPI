@@ -49,7 +49,7 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tag");
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("API.Models.Entities.User", b =>
@@ -66,7 +66,7 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("ImageTag", b =>

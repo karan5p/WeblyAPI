@@ -12,10 +12,10 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ImageController : ControllerBase
+    public class ImagesController : ControllerBase
     {
         private readonly DataContext _context;
-        public ImageController(DataContext context)
+        public ImagesController(DataContext context)
         {
             _context = context;
         }
