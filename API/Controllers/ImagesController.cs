@@ -62,6 +62,45 @@ namespace API.Controllers
             };
             return Ok(imageDTO);
         }
+        //GET /api/images/byTag?tag=cars
+        [HttpGet("byTag")]
+        //Return all the images that include the given tag. The result should be paginated (10 images per page). The result should be ordered by posting date. If the result is empty, return 404
+        public async Task<IActionResult> GetImagesByTag([FromQuery] string tag, [FromQuery] int page = 1)
+        {
+            var images = _context.Images.Include(i => i.Tags).Where(i => i.Tags.Any(t => t.Text == tag)).OrderByDescending(i => i.Id).Skip((page - 1) * 10).Take(10);
+            var imagesDTO = new List<ImageDTO>();
+            foreach (var image in images)
+            {
+                var imageDTO = new ImageDTO
+                {
+                    Id = image.Id,
+                    Url = image.Url,
+                    // Username = image.User.Username,
+                    //Tags = image.Tags.Select(t => t.Text).ToList()
+                };
+                imagesDTO.Add(imageDTO);
+            }
+            var pagedResponse = ResponseHelper.GetPagedResponse("http://localhost:5000/api/images/byTag?tag=" + tag, imagesDTO, page, 10, _context.Images.Count());
+            return Ok(pagedResponse);
+        }
+        //GET /api/images/populartags
+        [HttpGet("populartags")]
+        //Return the top 5 popular tags from the database (the tags that repeated the most). The result should be ordered by popularity (the tags that are used the most should be at the top).
+        public async Task<IActionResult> GetPopularTags()
+        {
+            var tags = _context.Tags.OrderByDescending(t => t.Images.Count).Take(5);
+            var tagsDTO = new List<TagDTO>();
+            foreach (var tag in tags)
+            {
+                var tagDTO = new TagDTO
+                {
+                    Text = tag.Text,
+                    Count = tag.Images.Count
+                };
+                tagsDTO.Add(tagDTO);
+            }
+            return Ok(tagsDTO);
+        }
 
 
     }
